@@ -351,6 +351,68 @@ func input() string {
 	return input
 }
 
+func PrintStats(l Layout) {
+	ftri := FastTrigrams(l, 500)
+	ftotal := float64(ftri.Total)
+	leftrolls := 100*float64(ftri.LeftInwardRolls)/ftotal + 100*float64(ftri.LeftOutwardRolls)/ftotal
+	rightrolls := 100*float64(ftri.RightInwardRolls)/ftotal + 100*float64(ftri.RightOutwardRolls)/ftotal
+
+	tm.Println()
+	tm.Printf("Rolls (l): %.2f%%\n", leftrolls)
+	tm.Printf("\tInward: ~%.2f%%\n", 100*float64(ftri.LeftInwardRolls)/ftotal)
+	tm.Printf("\tOutward: ~%.2f%%\n", 100*float64(ftri.LeftOutwardRolls)/ftotal)
+	tm.Printf("Rolls (r): %.2f%%\n", rightrolls)
+	tm.Printf("\tInward: ~%.2f%%\n", 100*float64(ftri.RightInwardRolls)/ftotal)
+	tm.Printf("\tOutward: ~%.2f%%\n", 100*float64(ftri.RightOutwardRolls)/ftotal)
+	tm.Printf("Alternates: ~%.2f%%\n", 100*float64(ftri.Alternates)/ftotal)
+	tm.Printf("Onehands: ~%.2f%%\n", 100*float64(ftri.Onehands)/ftotal)
+	tm.Printf("Redirects: ~%.2f%%\n", 100*float64(ftri.Redirects)/ftotal)
+
+	var weighted []float64
+	var unweighted []float64
+	weighted = FingerSpeed(&l, true)
+	unweighted = FingerSpeed(&l, false)
+
+	var highestUnweightedFinger string
+	var highestUnweighted float64
+	var utotal float64
+
+	var highestWeightedFinger string
+	var highestWeighted float64
+	var wtotal float64
+	for i := 0; i < 10; i++ {
+		utotal += unweighted[i]
+		if unweighted[i] > highestUnweighted {
+			highestUnweighted = unweighted[i]
+			highestUnweightedFinger = FingerNames[i]
+		}
+
+		wtotal += weighted[i]
+		if weighted[i] > highestWeighted {
+			highestWeighted = weighted[i]
+			highestWeightedFinger = FingerNames[i]
+		}
+	}
+	tm.Printf("Finger Speed (weighted): %.2f\n", weighted)
+	tm.Printf("Finger Speed (unweighted): %.2f\n", unweighted)
+	tm.Printf("Highest Speed (weighted): %.2f (%s)\n", highestWeighted, highestWeightedFinger)
+	tm.Printf("Highest Speed (unweighted): %.2f (%s)\n", highestUnweighted, highestUnweightedFinger)
+
+	left, right := IndexUsage(l)
+	tm.Printf("Index Usage: %.1f%% %.1f%%\n", left, right)
+
+	var sfb float64
+
+	sfb = SFBs(l, false)
+	lsb := float64(LSBs(l))
+
+	tm.Printf("SFBs: %.3f%%\n", 100*sfb/l.Total)
+	tm.Printf("DSFBs: %.3f%%\n", 100*SFBs(l, true)/l.Total)
+	tm.Printf("LSBs: %.2f%%\n", 100*lsb/l.Total)
+
+	tm.Println()
+}
+
 var pins [][]string
 
 func Interactive(l Layout) {
@@ -388,7 +450,8 @@ func Interactive(l Layout) {
 		tm.Printf("Score: %.2f", Score(l))
 		printsfbs(&l)
 		printworst(&l)
-		printtrigrams(&l)
+		// printtrigrams(&l)
+		PrintStats(l)
 		end := time.Now()
 		elapsed := end.Sub(start)
 		s := elapsed.String()

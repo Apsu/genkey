@@ -20,7 +20,7 @@ var DynamicFlag bool
 var ImproveFlag bool
 var ImproveLayout Layout
 
-var FingerNames = [8]string{"LP", "LR", "LM", "LI", "RI", "RM", "RR", "RP"}
+var FingerNames = [10]string{"LP", "LR", "LM", "LI", "RI", "RM", "RR", "RP", "LT", "RT"}
 
 var Layouts map[string]Layout
 var GeneratedFingermap map[Finger][]Pos
@@ -35,7 +35,7 @@ var Weight struct {
 		SFB       float64
 		DSFB      float64
 		KeyTravel float64
-		KPS       [8]float64
+		KPS       [10]float64
 	}
 	Dist struct {
 		Lateral float64

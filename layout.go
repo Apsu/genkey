@@ -258,7 +258,7 @@ func GenKeymap(keys [][]string) map[string]Pos {
 }
 
 func FingerSpeed(l *Layout, weighted bool) []float64 {
-	speeds := []float64{0, 0, 0, 0, 0, 0, 0, 0}
+	speeds := []float64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	sfbweight := Weight.FSpeed.SFB
 	dsfbweight := Weight.FSpeed.DSFB
 	for f, posits := range l.Fingermap {
