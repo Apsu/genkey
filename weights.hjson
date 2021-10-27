@@ -16,6 +16,8 @@
       4.8  # rm
       3.6  # rr
       1.5  # rp
+      1.0  # lt
+      1.0  # rt
     ]
     KeyTravel: 0.01 # how much baseline distance there is per keypress 
   }
